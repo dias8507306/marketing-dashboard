@@ -62,8 +62,9 @@ Production: copy `.env.example` to `.env`, fill in the keys and run `uvicorn app
 
 > All data in this repository is randomly generated; brand names are anonymized.
 
-## Қысқаша (KZ)
-Онлайн мектептің маркетинг бөліміне арналған ішкі веб-қосымша: сатылым (amoCRM), лидтер, Instagram статистикасы, жарнама шығыны және бөлімнің айлық жоспары бір жерде.
-Instagram Direct-боты коммент пен хаттарды лидке айналдырып, жауаптарды Google Sheets-ке жазады.
-FastAPI + серверде құрастырылатын HTML, Vercel-де serverless түрінде жұмыс істейді.
-Демо: `pip install -r requirements.txt`, сосын `python demo.py` (логин: demo / demo) — барлық деректер кездейсоқ жасалған.
+## Кратко (RU)
+
+Внутреннее веб-приложение для отдела маркетинга онлайн-школы: продажи (amoCRM), лиды, статистика Instagram, расходы на рекламу и месячный план отдела в одном месте.
+Instagram Direct-бот превращает комментарии и сообщения в лиды и записывает ответы в Google Sheets.
+FastAPI + HTML с серверным рендерингом, работает serverless на Vercel.
+Демо: `pip install -r requirements.txt`, затем `python demo.py` (логин: demo / demo) — все данные сгенерированы случайно.
