@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.pyc
+node_modules/
+.vercel/
+*.db
+*.sqlite
+*.db-wal
+*.db-shm
+*.log
+data/
+demo/.data/
+.sheets_secret

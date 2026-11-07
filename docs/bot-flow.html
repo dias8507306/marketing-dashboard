@@ -1,0 +1,242 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>
+<title>EduApp Директ-бот</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column — what changed, the path as a numbered sequence, the chat as the client sees it, then where the data lands. */
+:root{
+  --bg:#F5F4FA; --surface:#FFFFFF; --surface-2:#F9F8FD; --ink:#231C45; --muted:#655F86; --line:#DEDAEC;
+  --violet:#5B3FD1; --violet-soft:#ECE7FF; --green:#1E8A4C; --green-soft:#E3F4E9; --sheet:#0F9D58;
+  --amber:#9A5B00; --amber-soft:#FFF1D9; --red:#B3372F; --red-soft:#FBE6E4;
+  --bubble-in:#EFEDF6; --bubble-out:#5B3FD1; --bubble-out-ink:#FFFFFF;
+  --display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:dark;
+  --bg:#15121F; --surface:#1E1A2C; --surface-2:#241F36; --ink:#EDEAF7; --muted:#A49EC0; --line:#342E48;
+  --violet:#9C86FF; --violet-soft:#2A2246; --green:#6BCB8F; --green-soft:#1C3325; --sheet:#34C27A;
+  --amber:#F0B45A; --amber-soft:#3A2C14; --red:#F08A80; --red-soft:#3D1D1A;
+  --bubble-in:#2A2540; --bubble-out:#6E55E0; --bubble-out-ink:#FFFFFF } }
+:root[data-theme="dark"]{ color-scheme:dark;
+  --bg:#15121F; --surface:#1E1A2C; --surface-2:#241F36; --ink:#EDEAF7; --muted:#A49EC0; --line:#342E48;
+  --violet:#9C86FF; --violet-soft:#2A2246; --green:#6BCB8F; --green-soft:#1C3325; --sheet:#34C27A;
+  --amber:#F0B45A; --amber-soft:#3A2C14; --red:#F08A80; --red-soft:#3D1D1A;
+  --bubble-in:#2A2540; --bubble-out:#6E55E0; --bubble-out-ink:#FFFFFF }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:40px 64px;display:grid;gap:52px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(28px,4.6vw,42px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(20px,2.6vw,25px);font-weight:700}
+h3{font-size:16px;font-weight:500}
+p{margin:0;max-width:68ch}
+.eyebrow{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--violet)}
+.lead{color:var(--muted);font-size:18px}
+header,section{display:grid;gap:18px}
+code,.kw{font-family:var(--mono);font-size:.88em}
+a{color:var(--violet)}
+a:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+
+.changes{display:grid;gap:10px}
+.change{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+.change .was{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--red) 55%,transparent)}
+.change .arrow{color:var(--violet);font-weight:700}
+.change .now{font-weight:600}
+
+.flow{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px clamp(16px,3vw,32px)}
+.step{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;position:relative;padding-bottom:26px}
+.step:last-child{padding-bottom:0}
+.step::before{content:"";position:absolute;left:21px;top:44px;bottom:0;width:2px;background:var(--line)}
+.step:last-child::before{display:none}
+.dot{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:700 15px var(--display);background:var(--violet-soft);color:var(--violet);position:relative;z-index:1}
+.dot.bot{background:var(--violet);color:#fff}
+.dot.sheet{background:var(--sheet);color:#fff}
+.dot.ok{background:var(--green);color:#fff}
+.step-body{display:grid;gap:8px;padding-top:9px}
+.who{font:600 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.who.bot{color:var(--violet)} .who.sheet{color:var(--sheet)}
+.split{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
+.split.two{grid-template-columns:1fr 1fr}
+.branch{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:4px;background:var(--surface-2);font-size:14px}
+.branch b{font-weight:600}
+.branch.no{border-color:color-mix(in srgb,var(--red) 40%,var(--line))}
+.branch.yes{border-color:color-mix(in srgb,var(--green) 50%,var(--line))}
+.tag{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 var(--body);padding:5px 9px;border-radius:999px;width:max-content}
+.tag.no{background:var(--red-soft);color:var(--red)} .tag.yes{background:var(--green-soft);color:var(--green)}
+.tag.warn{background:var(--amber-soft);color:var(--amber)} .tag.vio{background:var(--violet-soft);color:var(--violet)}
+.parse{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.parse span{font-size:13px;padding:5px 10px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line)}
+.parse span b{font-family:var(--mono);font-size:12px;color:var(--violet)}
+
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 16px 20px;display:grid;gap:10px;max-width:520px}
+.chat-head{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.ava{width:32px;height:32px;border-radius:50%;background:var(--violet);color:#fff;display:grid;place-items:center;font:700 13px var(--display)}
+.chat-head b{font-weight:600;font-size:14px} .chat-head span{display:block;color:var(--muted);font-size:12px}
+.msg{max-width:88%;padding:10px 13px;border-radius:16px;font-size:14px;line-height:1.45;white-space:pre-line}
+.msg.in{background:var(--bubble-in);border-bottom-left-radius:5px;justify-self:start}
+.msg.out{background:var(--bubble-out);color:var(--bubble-out-ink);border-bottom-right-radius:5px;justify-self:end}
+.btn-fake{justify-self:start;border:1px solid var(--line);background:var(--surface);color:var(--violet);font:600 13px var(--body);padding:8px 14px;border-radius:10px;margin-top:-4px}
+.sys{justify-self:center;font-size:12px;color:var(--muted)}
+.chat-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+
+.sheet-demo{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.sheet-demo table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+.sheet-demo th,.sheet-demo td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.sheet-demo th{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+.sheet-demo tr:last-child td{border-bottom:0}
+.sheet-demo .ex{font-size:12px;color:var(--muted);padding:8px 12px}
+.places{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.place{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:grid;gap:8px;align-content:start}
+.place h3{font-size:15px}
+.place p{font-size:14px;color:var(--muted)}
+.place a{font-weight:600;overflow-wrap:anywhere}
+.notes{display:grid;gap:10px}
+.note{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px}
+.note p{font-size:15px}
+footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+@media (max-width:760px){ .change{grid-template-columns:1fr} .change .arrow{display:none} .split,.split.two,.chat-row,.places{grid-template-columns:1fr} }
+</style>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">Instagram · @eduapp_demo · обновлено 30.09.2026</span>
+  <h1>Как работает Директ-бот EduApp</h1>
+  <p class="lead">Человек пишет из рекламы, бот проверяет подписку и задаёт три вопроса: город, класс ребёнка, номер телефона. Ответы сами попадают в Google Таблицу, а за номер бот благодарит. Дальше с человеком связывается менеджер.</p>
+</header>
+
+<section aria-labelledby="h-ch">
+  <h2 id="h-ch">Что изменилось 30 сентября</h2>
+  <div class="changes">
+    <div class="change"><span class="was">После подписки: меню тренингов, выбор класса, ссылки</span><span class="arrow">→</span><span class="now">После подписки: одно приветствие с тремя вопросами</span></div>
+    <div class="change"><span class="was">Результат — клик по ссылке на тренинг</span><span class="arrow">→</span><span class="now">Результат — номер телефона в Google Таблице</span></div>
+    <div class="change"><span class="was">Менеджер ищет клиентов в переписке</span><span class="arrow">→</span><span class="now">Менеджер берёт готовый список: город, класс, номер</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-flow">
+  <h2 id="h-flow">Путь клиента</h2>
+  <div class="flow">
+    <div class="step"><div class="dot">1</div><div class="step-body">
+      <span class="who">Реклама · Ads Manager</span>
+      <h3>Человек нажимает на рекламу, в Директе уже стоит готовый текст</h3>
+      <div class="split">
+        <div class="branch"><b>Математика</b><span>«Математика бойынша тренинг туралы…»</span></div>
+        <div class="branch"><b>Ағылшын</b><span>«Ағылшын тілі бойынша тренинг туралы…»</span></div>
+        <div class="branch"><b>Алтын сақа</b><span>«Алтын сақа…» или стандартный вопрос Meta «Можно узнать об этом подробнее?»</span></div>
+      </div>
+    </div></div>
+
+    <div class="step"><div class="dot bot">2</div><div class="step-body">
+      <span class="who bot">Бот</span>
+      <h3>Проверяет подписку на @eduapp_demo</h3>
+      <div class="split two">
+        <div class="branch no"><span class="tag no">Не подписан</span><span>«Толық ақпарат алу үшін парақшаға тіркеліңіз!» и кнопка «Тексеру ✅». Пока не подпишется, дальше не пустит.</span></div>
+        <div class="branch yes"><span class="tag yes">Подписан</span><span>Сразу переходит к шагу 3. Кто подписался через бота, увидит ещё «Парақшаға сәтті тіркелдіңіз! 🎉».</span></div>
+      </div>
+    </div></div>
+
+    <div class="step"><div class="dot bot">3</div><div class="step-body">
+      <span class="who bot">Бот</span>
+      <h3>Отправляет приветствие с тремя вопросами — обычным текстом, без кнопок</h3>
+      <p>1. Қай қаладансыз? · 2. Балаңыз нешінші сыныпта оқиды? · 3. Байланыс нөміріңіз?</p>
+    </div></div>
+
+    <div class="step"><div class="dot">4</div><div class="step-body">
+      <span class="who">Клиент</span>
+      <h3>Отвечает как удобно: одним сообщением или несколькими</h3>
+      <p>Бот 3 дня собирает все ответы этого человека в одну строку и сам находит в тексте:</p>
+      <div class="parse"><span>город · <b>Алматы, Шымкент, Қаскелең…</b></span><span>класс · <b>5-сынып, 5 класс, 5</b></span><span>телефон · <b>8 707…, +7 (707)…, 707…</b></span></div>
+    </div></div>
+
+    <div class="step"><div class="dot sheet">5</div><div class="step-body">
+      <span class="who sheet">Google Таблица</span>
+      <h3>Строка появляется в таблице примерно через 20 секунд</h3>
+      <p>Если Google на минуту недоступен, ответ не теряется: бот хранит его у себя и дописывает в таблицу позже.</p>
+    </div></div>
+
+    <div class="step"><div class="dot bot">6</div><div class="step-body">
+      <span class="who bot">Бот</span>
+      <h3>Как только пришёл номер — «Кері байланысыңыз үшін рақмет!🙌🏻»</h3>
+      <p>Один раз на человека. В таблице отметка «Рақмет жіберілді: иә».</p>
+    </div></div>
+
+    <div class="step"><div class="dot ok">✓</div><div class="step-body">
+      <span class="who">Менеджер</span>
+      <h3>Звонит или пишет по номеру из таблицы</h3>
+      <p>Всё, что написал человек, сохранено целиком в колонке «Жауаптары» — если бот что-то распознал не так, менеджер видит исходный текст.</p>
+    </div></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-chat">
+  <h2 id="h-chat">Как это выглядит в Директе</h2>
+  <div class="chat-row">
+    <div class="chat" aria-label="Переписка">
+      <div class="chat-head"><div class="ava">Z</div><div><b>eduapp.example.com</b><span>Директ · пример</span></div></div>
+      <div class="msg out">«Алтын сақа» олимпиадасына дайындық туралы толық ақпарат білгім келеді</div>
+      <div class="msg in">Сәлеметсіз бе!
+Толық ақпарат алу үшін @eduapp_demo парақшасына тіркеліңіз!</div>
+      <div class="btn-fake">Тексеру ✅</div>
+      <div class="sys">подписался и нажал «Тексеру»</div>
+      <div class="msg in">Парақшаға сәтті тіркелдіңіз! 🎉
+
+Сәлеметсіз бе!
+EduApp app білім беру платформасына қош келдіңіз! 💜
+…
+1. Қай қаладансыз?
+2. Балаңыз нешінші сыныпта оқиды?
+3. Байланыс нөміріңіз?</div>
+    </div>
+    <div class="chat" aria-label="Ответы клиента">
+      <div class="chat-head"><div class="ava">Z</div><div><b>eduapp.example.com</b><span>продолжение</span></div></div>
+      <div class="msg out">Алматы</div>
+      <div class="msg out">балам 4 сыныпта</div>
+      <div class="msg out">8 700 123 45 67</div>
+      <div class="msg in">Кері байланысыңыз үшін рақмет!🙌🏻</div>
+      <div class="sys">строка уже в Google Таблице</div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-sheet">
+  <h2 id="h-sheet">Что попадает в таблицу</h2>
+  <div class="sheet-demo">
+    <table>
+      <thead><tr><th>Бірінші жазған уақыты</th><th>Instagram</th><th>Бағыт</th><th>Қала</th><th>Сынып</th><th>Телефон</th><th>Жауаптары</th><th>Рақмет</th></tr></thead>
+      <tbody><tr><td>30.09.2026 15:42</td><td>@ник (ссылка)</td><td>Алтын сақа</td><td>Алматы</td><td>4</td><td>+7 700 123 45 67</td><td>Алматы | балам 4 сыныпта | 8 700 123 45 67</td><td>иә</td></tr></tbody>
+    </table>
+    <p class="ex">Пример строки для наглядности, не реальный клиент.</p>
+  </div>
+</section>
+
+<section aria-labelledby="h-where">
+  <h2 id="h-where">Где смотреть</h2>
+  <div class="places">
+    <div class="place"><span class="tag yes">Google Таблица</span><h3>EduApp Instagram лидтер</h3>
+      <p>Список для менеджеров: одна строка — один человек.</p>
+      <a href="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit" target="_blank" rel="noopener">Открыть таблицу</a></div>
+    <div class="place"><span class="tag vio">Статистика · вкладка «Лидтер»</span><h3>Те же лиды на сайте статистики</h3>
+      <p>Сколько получили приветствие, ответили, оставили номер; поиск по нику, городу, телефону; кнопка «Google кестені ашу».</p>
+      <span class="kw">…/api/igbot/stats#leads</span></div>
+    <div class="place"><span class="tag vio">Статистика · «Бот» и «Рассылки»</span><h3>Воронка и рассылки</h3>
+      <p>Сколько написали из рекламы и подписались; все рассылки по дням с датой и временем.</p>
+      <span class="kw">…/api/igbot/stats</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-notes">
+  <h2 id="h-notes">Важно знать</h2>
+  <div class="notes">
+    <div class="note"><span class="tag warn">Реклама</span><p>В готовом тексте рекламы должно остаться ключевое слово: «Математика», «Ағылшын» или «Алтын сақа». Иначе бот не поймёт, что человек пришёл из рекламы.</p></div>
+    <div class="note"><span class="tag warn">24 часа</span><p>Рассылку можно отправить только тем, кто писал в последние 24 часа — это правило Meta. Бот сам отбирает таких людей и никому не отправляет одно и то же дважды.</p></div>
+    <div class="note"><span class="tag warn">Менеджеры</span><p>Бот не отвечает на вопросы — только собирает данные и благодарит за номер. Вопросы в Директе и звонки — на менеджерах.</p></div>
+    <div class="note"><span class="tag warn">Назад</span><p>Старый сценарий с меню и ссылками сохранён и включается одной настройкой, если понадобится.</p></div>
+  </div>
+</section>
+
+<footer>Бот работает на сервере EduApp круглосуточно. Схема обновлена 30.09.2026.</footer>
+</div>
+
+</body></html>

@@ -1,0 +1,37 @@
+# Каталог тренингов EduApp. Демо-каталог (ссылки и цены вымышленные).
+# Цены: «Тариф описание» со скидкой (13 000 −50% = 6 500; 70 000 −80% = 14 000).
+# send=no — ссылку боту отправлять НЕЛЬЗЯ (например, челлендж, который не продаём).
+# иначе две ветки продажи конфликтуют.
+# kind	grade	level	title_ru	title_kz	price	days	send	url
+quarter	3	A	Математика, 3 класс, I четверть	Математика, 3 сынып, I тоқсан	6 500	90	yes	https://eduapp.example.com/student/training/db5b5fab-8f4d-3e27-dda1-494c73cf256d/chapter
+quarter	4	A	Математика, 4 класс, I четверть	Математика, 4 сынып, I тоқсан	6 500	90	yes	https://eduapp.example.com/student/training/73ab4876-7734-d7c1-c7fd-e805ec99108d/chapter
+mega	3	A	Мега қайталау по математике, 3 класс	Математика Мега қайталау, 3 сынып	14 000	365	yes	https://eduapp.example.com/student/training/309d6b79-965e-da32-dae4-45508201e2bd/chapter
+quarter	3	B	Математика, 3 класс, I четверть, уровень B	Математика, 3 сынып, I тоқсан, B деңгей	6 500	90	yes	https://eduapp.example.com/student/training/79cb9e86-830c-71c2-cdcc-69292f45e678/chapter
+challenge_history	40127	—	Үйсіндер (челлендж по истории)	Үйсіндер (тарих челленджі)	—	—	no	https://eduapp.example.com/student/training/2fa91425-cb00-8853-9d2c-67eda13ffe79/chapter
+mega	4	A	Мега қайталау по математике, 4 класс	Математика Мега қайталау, 4 сынып	14 000	365	yes	https://eduapp.example.com/student/training/244caf9c-4dab-b481-7253-edc618187993/chapter
+english	1,2,3,4,5	—	Английский, English Low A1	Ағылшын тілі, English Low A1	6 500	90	yes	https://eduapp.example.com/student/training/e3eff9c0-cf44-dd3f-89e7-d15f17362f25/chapter
+quarter	5	A	Математика, 5 класс, I четверть	Математика, 5 сынып, I тоқсан	6 500	90	yes	https://eduapp.example.com/student/training/986e86cb-0ab8-ab67-a26b-7f62b1852f27/chapter
+altyn_saka	4	I кезең	Алтын сақа, I этап, 4 класс	Алтын сақа, I кезең, 4 сынып	5 500	30	yes	https://eduapp.example.com/student/training/73f778aa-f6fa-5db8-656a-bd72fb710734/chapter
+altyn_saka	3	I кезең	Алтын сақа, I этап, 3 класс	Алтын сақа, I кезең, 3 сынып	5 500	30	yes	https://eduapp.example.com/student/training/a66b0d38-9d95-847e-bd29-9753a7677796/chapter
+altyn_saka	3	III кезең	Алтын сақа, III этап, 3 класс	Алтын сақа, III кезең, 3 сынып	5 500	30	yes	https://eduapp.example.com/student/training/d4ea65d0-03d7-1684-9f85-58a628518867/chapter
+altyn_saka	4	III кезең	Алтын сақа, III этап, 4 класс	Алтын сақа, III кезең, 4 сынып	5 500	30	yes	https://eduapp.example.com/student/training/09208a65-0f3e-bdd3-102b-938b8743feb6/chapter
+mega	6	A	Мега қайталау по математике, 6 класс	Математика Мега қайталау, 6 сынып	14 000	365	yes	https://eduapp.example.com/student/training/99809225-3def-fa38-e12b-2b8f30b17d0b/chapter
+mega	5	A	Мега қайталау по математике, 5 класс	Математика Мега қайталау, 5 сынып	14 000	365	yes	https://eduapp.example.com/student/training/5387f613-76c4-68ae-c732-1cc007b37e14/chapter
+altyn_saka	4	II кезең	Алтын сақа, II этап, 4 класс	Алтын сақа, II кезең, 4 сынып	5 500	30	yes	https://eduapp.example.com/student/training/320094ea-d7a9-4ded-9749-1e2370c6a5b8/chapter
+quarter	6	B	Математика, 6 класс, I четверть, уровень B	Математика, 6 сынып, I тоқсан, B деңгей	6 500	90	yes	https://eduapp.example.com/student/training/4b4d8474-a3ea-284d-3bd0-334684e55160/chapter
+altyn_saka	3	II кезең	Алтын сақа, II этап, 3 класс	Алтын сақа, II кезең, 3 сынып	5 500	30	yes	https://eduapp.example.com/student/training/15c1d2df-a996-4aef-012d-0ea67ff12229/chapter
+altyn_saka	5	I кезең	Алтын сақа, I этап, 5 класс	Алтын сақа, I кезең, 5 сынып	5 500	30	yes	https://eduapp.example.com/student/training/6822a6b2-4735-af1c-a7a1-149075139237/chapter
+quarter	5	B	Математика, 5 класс, I четверть, уровень B	Математика, 5 сынып, I тоқсан, B деңгей	6 500	90	yes	https://eduapp.example.com/student/training/ee82ec3f-fee5-a5b2-8d1f-e1daff666589/chapter
+altyn_saka	6	I кезең	Алтын сақа, I этап, 6 класс	Алтын сақа, I кезең, 6 сынып	5 500	30	yes	https://eduapp.example.com/student/training/4105cca7-b533-02fc-154c-d2aad7185dda/chapter
+quarter	6	A	Математика, 6 класс, I четверть	Математика, 6 сынып, I тоқсан	6 500	90	yes	https://eduapp.example.com/student/training/834c687a-3acb-6266-c20b-a2c250b601fc/chapter
+quarter	4	B	Математика, 4 класс, I четверть, уровень B	Математика, 4 сынып, I тоқсан, B деңгей	6 500	90	yes	https://eduapp.example.com/student/training/902a174f-11fa-2ac0-079d-d25a49fe85b0/chapter
+altyn_saka	6	III кезең	Алтын сақа, III этап, 6 класс	Алтын сақа, III кезең, 6 сынып	5 500	30	yes	https://eduapp.example.com/student/training/1b98fbe4-6680-9a11-1ba1-192ec42b7170/chapter
+altyn_saka	5	III кезең	Алтын сақа, III этап, 5 класс	Алтын сақа, III кезең, 5 сынып	5 500	30	yes	https://eduapp.example.com/student/training/111b8aaa-62f2-8d1a-4a78-9cb3d8b9b45c/chapter
+english	2	—	Английский, English Mid A1	Ағылшын тілі, English Mid A1	6 500	90	yes	https://eduapp.example.com/student/training/af5570ee-d8e9-4b15-0452-ef05f542441d/chapter
+altyn_saka	5	II кезең	Алтын сақа, II этап, 5 класс	Алтын сақа, II кезең, 5 сынып	5 500	30	yes	https://eduapp.example.com/student/training/ed52a241-35b0-0a54-36a8-0bdf0023b682/chapter
+english	1,2,3,4,5,6	—	Английский, English A0	Ағылшын тілі, English A0	6 500	90	yes	https://eduapp.example.com/student/training/601e5b45-7851-1608-0d65-0372e90794df/chapter
+altyn_saka	6	II кезең	Алтын сақа, II этап, 6 класс	Алтын сақа, II кезең, 6 сынып	5 500	30	yes	https://eduapp.example.com/student/training/6b77730f-65bd-9acb-b57a-6a1dfaf8cda9/chapter
+mega	3	B	Мега қайталау по математике, 3 класс, уровень B	Математика Мега қайталау, 3 сынып, B деңгей	14 000	365	yes	https://eduapp.example.com/student/training/32d03fdd-a123-f501-90f5-380e12b2a414/chapter
+mega	4	B	Мега қайталау по математике, 4 класс, уровень B	Математика Мега қайталау, 4 сынып, B деңгей	14 000	365	yes	https://eduapp.example.com/student/training/563e9bed-4510-0358-acc6-d8f2c74c7ccf/chapter
+mega	5	B	Мега қайталау по математике, 5 класс, уровень B	Математика Мега қайталау, 5 сынып, B деңгей	14 000	365	yes	https://eduapp.example.com/student/training/03e0d681-5524-54f1-4fab-6f3e164f1513/chapter
+mega	6	B	Мега қайталау по математике, 6 класс, уровень B	Математика Мега қайталау, 6 сынып, B деңгей	14 000	365	yes	https://eduapp.example.com/student/training/ec3fbf4d-c20e-f164-68f9-18d8f6cdb2f8/chapter

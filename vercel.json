@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/igbot/cron",
+      "schedule": "5 19 * * *"
+    },
+    {
+      "path": "/api/igbot/morning",
+      "schedule": "0 3 * * *"
+    }
+  ],
+  "regions": [
+    "fra1"
+  ]
+}

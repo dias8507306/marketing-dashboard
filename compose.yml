@@ -1,0 +1,23 @@
+name: eduapp-dashboard
+services:
+  bot:
+    build: .
+    image: eduapp-dashboard:latest
+    container_name: eduapp_dashboard
+    restart: unless-stopped
+    # Meta app secrets, webhook verify token and the bot's own settings (see .env.example)
+    env_file:
+      - .env
+    environment:
+      DATA_DIR: /data
+      CONF_DIR: /app/conf
+      BOT_ENABLED: "false"
+    volumes:
+      - ./data:/data
+      - ./conf:/app/conf:ro
+    ports:
+      - "127.0.0.1:8100:8100"
+    # The host resolver takes ~4-5 s per lookup; public DNS answers in ~20 ms.
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
